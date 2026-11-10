@@ -67,3 +67,17 @@ class TestCategoryMutation:
         category = Category.objects.create(name="Their Category", owner=other_user)
         response = auth_client.patch(f"{CATEGORIES_URL}{category.id}/", {"name": "Hacked"})
         assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.django_db
+def test_category_rejects_invalid_hex_color(auth_client):
+    response = auth_client.post(CATEGORIES_URL, {"name": "Invalid Color", "color": "#GGGGGG"})
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "color" in response.data.get("errors", {})
+
+
+@pytest.mark.django_db
+def test_category_accepts_hex_color(auth_client):
+    response = auth_client.post(CATEGORIES_URL, {"name": "Valid Color", "color": "#aAbB09"})
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.data["color"] == "#aAbB09"

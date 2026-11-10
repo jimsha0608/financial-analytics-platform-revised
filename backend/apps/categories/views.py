@@ -8,9 +8,6 @@ from .serializers import CategorySerializer
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    """Categories are shared reading (defaults + your own) but scoped
-    writing (you may only create/edit/delete your own)."""
-
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
     filter_backends = []

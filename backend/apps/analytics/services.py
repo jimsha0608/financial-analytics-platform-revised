@@ -94,7 +94,7 @@ def get_trend(user, date_from=None, date_to=None, interval="month"):
 
 def _percent_change(old, new):
     if old == 0:
-        return None  # undefined (division by zero) - frontend renders "N/A"
+        return None
     return round(float((new - old) / old * 100), 2)
 
 
@@ -108,8 +108,8 @@ def get_monthly_report(user, month: date):
         prev_start = start.replace(month=start.month - 1)
     prev_end = prev_start.replace(day=monthrange(prev_start.year, prev_start.month)[1])
 
-    current = get_summary(user, start, end)
-    previous = get_summary(user, prev_start, prev_end)
+    current_income, current_expenses = _income_expense_totals(_scoped_qs(user, start, end))
+    previous_income, previous_expenses = _income_expense_totals(_scoped_qs(user, prev_start, prev_end))
 
     largest_expenses = [
         {
@@ -130,17 +130,17 @@ def get_monthly_report(user, month: date):
 
     return {
         "month": start.isoformat(),
-        "total_income": current["total_income"],
-        "total_expenses": current["total_expenses"],
-        "net_savings": current["net_income"],
+        "total_income": current_income,
+        "total_expenses": current_expenses,
+        "net_savings": current_income - current_expenses,
         "spending_by_category": get_category_breakdown(user, start, end),
         "largest_expenses": largest_expenses,
         "previous_month": {
             "month": prev_start.isoformat(),
-            "total_income": previous["total_income"],
-            "total_expenses": previous["total_expenses"],
-            "net_savings": previous["net_income"],
+            "total_income": previous_income,
+            "total_expenses": previous_expenses,
+            "net_savings": previous_income - previous_expenses,
         },
-        "income_change_percent": _percent_change(previous["total_income"], current["total_income"]),
-        "expense_change_percent": _percent_change(previous["total_expenses"], current["total_expenses"]),
+        "income_change_percent": _percent_change(previous_income, current_income),
+        "expense_change_percent": _percent_change(previous_expenses, current_expenses),
     }

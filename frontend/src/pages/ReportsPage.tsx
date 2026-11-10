@@ -52,7 +52,9 @@ export default function ReportsPage() {
         if (isMounted) setReport(data);
       })
       .catch((err: unknown) => {
-        if (isMounted) setError(getErrorMessage(err));
+        if (!isMounted) return;
+        setError(getErrorMessage(err));
+        setReport(null);
       })
       .finally(() => {
         if (isMounted) setIsLoading(false);
@@ -77,11 +79,11 @@ export default function ReportsPage() {
 
       {error && <ErrorMessage message={error} />}
 
-      {isLoading || !report ? (
+      {isLoading ? (
         <div className="flex justify-center py-24">
           <Spinner />
         </div>
-      ) : (
+      ) : report ? (
         <>
           <p className="text-sm text-slate-500">Showing report for {formatMonthLabel(report.month)}</p>
 
@@ -171,7 +173,7 @@ export default function ReportsPage() {
             </dl>
           </Card>
         </>
-      )}
+      ) : null}
     </div>
   );
 }

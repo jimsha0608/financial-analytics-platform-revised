@@ -7,8 +7,6 @@ User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Read/update representation of the authenticated user's own profile."""
-
     class Meta:
         model = User
         fields = ("id", "email", "first_name", "last_name", "date_joined")
@@ -39,9 +37,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    """Login serializer that also returns the user's profile alongside the
-    token pair, so the frontend doesn't need a second round-trip after login."""
-
     def validate(self, attrs):
         data = super().validate(attrs)
         data["user"] = UserSerializer(self.user).data
