@@ -8,10 +8,6 @@ from .serializers import TransactionSerializer
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
-    """Full CRUD over the authenticated user's own transactions, with
-    backend-side search/filter/sort/pagination so the frontend never has to
-    download the full table to slice it client-side."""
-
     serializer_class = TransactionSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
     filterset_class = TransactionFilter

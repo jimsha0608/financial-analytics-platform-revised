@@ -9,15 +9,6 @@ logger = logging.getLogger(__name__)
 
 
 def custom_exception_handler(exc, context):
-    """Normalize every API error response into one consistent shape:
-
-        {"detail": "human readable summary", "errors": {"field": ["msg", ...]}}
-
-    `errors` is only included when DRF has field-level validation detail to
-    offer; auth/permission/not-found errors just get `detail`. Anything DRF
-    doesn't recognize (e.g. a raw DB IntegrityError) is converted into a 400
-    instead of leaking a 500 with an internal stack trace to the client.
-    """
     if isinstance(exc, IntegrityError):
         exc = drf_exceptions.ValidationError(
             {"detail": "This operation violates a database constraint."}

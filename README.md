@@ -47,7 +47,7 @@ The main models are:
 - **Category:** Stores shared default categories and categories created by individual users.
 - **Transaction:** Stores income and expense records, including amount, date, merchant, category and notes.
 
-A few design decisions I made:
+A few implementation details:
 
 - Used `DECIMAL` for transaction amounts to avoid floating-point rounding issues with currency.
 - Used UUIDs for transaction IDs.
@@ -85,9 +85,11 @@ npm run dev
 
 ## Testing
 
-**Backend:** Run `pytest` from `backend/` to check authentication, transactions, categories and analytics.
+**Backend:** From `backend/`, run `pytest`.
 
-**Frontend:** Run `npm test`, `npm run lint` and `npm run build` from `frontend/`.
+**Frontend:** From `frontend/`, run `npm test`, `npm run lint`, and `npm run build`.
+
+These checks still need to be verified in a clean environment.
 
 ## Current Status
 
@@ -103,4 +105,4 @@ Some potential improvements I'd like to work on next:
 
 ## Screenshots
 
-Screenshots are not included yet.
+I haven't added screenshots yet.

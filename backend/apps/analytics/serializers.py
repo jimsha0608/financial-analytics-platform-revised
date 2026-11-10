@@ -1,13 +1,3 @@
-"""Output serializers for the analytics/reports endpoints.
-
-These wrap plain dicts coming back from services.py. Passing money values
-through DecimalField (rather than returning raw Decimal objects straight in
-a Response) matters: DRF's JSON encoder falls back to float() for a bare
-Decimal, silently reintroducing the floating-point issue we deliberately
-avoided in the database layer. Routing everything through DecimalField
-keeps every monetary value a JSON string on the wire, exactly like the
-transaction serializer already does.
-"""
 from rest_framework import serializers
 
 MONEY_KWARGS = {"max_digits": 14, "decimal_places": 2}

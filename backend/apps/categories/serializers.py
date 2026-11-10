@@ -1,3 +1,5 @@
+import re
+
 from rest_framework import serializers
 
 from .models import Category
@@ -18,6 +20,6 @@ class CategorySerializer(serializers.ModelSerializer):
         return value
 
     def validate_color(self, value):
-        if value and not (len(value) == 7 and value.startswith("#")):
+        if value and not (re.fullmatch(r"#[0-9a-fA-F]{6}", value)):
             raise serializers.ValidationError("Color must be a hex code like #4C6EF5.")
         return value

@@ -7,15 +7,6 @@ from django.db import models
 
 
 class Transaction(models.Model):
-    """A single income or expense record belonging to one user.
-
-    Uses a UUID primary key rather than an auto-incrementing integer: these
-    IDs are exposed directly in URLs (/api/transactions/{id}/), and a
-    sequential ID would let one authenticated user infer how many
-    transactions exist system-wide, or enumerate other users' records by
-    walking the ID space even though `IsOwner` would reject each guess.
-    """
-
     class TransactionType(models.TextChoices):
         INCOME = "income", "Income"
         EXPENSE = "expense", "Expense"
@@ -32,8 +23,6 @@ class Transaction(models.Model):
         related_name="transactions",
     )
     type = models.CharField(max_length=7, choices=TransactionType.choices)
-    # Decimal, never float: money must never be subject to binary
-    # floating-point rounding error (0.1 + 0.2 != 0.3).
     amount = models.DecimalField(
         max_digits=12, decimal_places=2, validators=[MinValueValidator(Decimal("0.01"))]
     )

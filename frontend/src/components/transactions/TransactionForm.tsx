@@ -7,6 +7,7 @@ import ErrorMessage from "@/components/ui/ErrorMessage";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import { getErrorMessage } from "@/utils/apiError";
+import { getDateRangeForPreset } from "@/utils/dateRanges";
 
 interface TransactionFormProps {
   categories: Category[];
@@ -15,7 +16,7 @@ interface TransactionFormProps {
   onCancel: () => void;
 }
 
-const today = new Date().toISOString().slice(0, 10);
+const today = getDateRangeForPreset("this_month").dateTo;
 
 export default function TransactionForm({
   categories,

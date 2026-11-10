@@ -70,7 +70,9 @@ export default function DashboardPage() {
         setRecentTransactions(transactionsData.results);
       })
       .catch((err: unknown) => {
-        if (isMounted) setError(getErrorMessage(err));
+        if (!isMounted) return;
+        setError(getErrorMessage(err));
+        setSummary(null);
       })
       .finally(() => {
         if (isMounted) setIsLoading(false);

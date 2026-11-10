@@ -4,14 +4,6 @@ from django.db.models import Q
 
 
 class Category(models.Model):
-    """A transaction category.
-
-    owner=None means a global default category, visible to and shared by
-    every user (Food, Rent, etc.). A non-null owner is a category a specific
-    user created for themselves. This lets the category list grow per-user
-    without ever duplicating the default set.
-    """
-
     name = models.CharField(max_length=50)
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -28,7 +20,6 @@ class Category(models.Model):
         ordering = ["name"]
         verbose_name_plural = "categories"
         constraints = [
-            # A user can't have two custom categories with the same name.
             models.UniqueConstraint(fields=["owner", "name"], name="unique_category_per_owner"),
             models.UniqueConstraint(
                 fields=["name"],
